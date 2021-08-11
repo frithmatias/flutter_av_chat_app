@@ -30,6 +30,7 @@ class CustomInput extends StatelessWidget {
                   color: Colors.black12, offset: Offset(0, 3), blurRadius: 5)
             ]),
         child: TextField(
+          controller: textController,
           autocorrect: false,
           keyboardType: keyboardType,
           obscureText: isPassword,

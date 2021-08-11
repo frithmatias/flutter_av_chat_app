@@ -3,7 +3,7 @@ import 'package:flutter/material.dart';
 class CustomButton extends StatelessWidget {
   final IconData? icon;
   final String text;
-  final void Function() onPressed;
+  final void Function()? onPressed;
 
   const CustomButton({
     Key? key,
@@ -14,6 +14,8 @@ class CustomButton extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+
+
     return ElevatedButton(
       child: SizedBox(
           width: double.infinity,
@@ -39,7 +41,8 @@ class CustomButton extends StatelessWidget {
         fixedSize: const Size.fromHeight(30.0),
         minimumSize: const Size(20, 50),
       ),
-      onPressed: onPressed,
+      onPressed: onPressed
+      
     );
   }
 }

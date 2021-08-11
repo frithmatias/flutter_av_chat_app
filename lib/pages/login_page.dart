@@ -1,8 +1,13 @@
+// ignore_for_file: avoid_print
+
+import 'package:chat/helpers/mostrar_alerta.dart';
+import 'package:chat/services/auth_service.dart';
 import 'package:chat/widgets/custom_button.dart';
 import 'package:chat/widgets/custom_input.dart';
 import 'package:chat/widgets/login_labels.dart';
 import 'package:chat/widgets/login_logo.dart';
 import 'package:flutter/material.dart';
+import 'package:provider/provider.dart';
 
 
 class LoginPage extends StatelessWidget {
@@ -46,9 +51,11 @@ class __FormState extends State<_Form> {
   final emailController = TextEditingController();
   final passwordController = TextEditingController();
 
-
   @override
   Widget build(BuildContext context) {
+
+    final authService = Provider.of<AuthService>(context);
+
     return Container(
       margin: const EdgeInsets.only(top: 40),
       padding: const EdgeInsets.symmetric(horizontal: 50),
@@ -69,9 +76,19 @@ class __FormState extends State<_Form> {
             isPassword: true,
           ),
           
-          CustomButton(icon: Icons.login_outlined, text: 'Entrar', onPressed: (){
-            // ignore: avoid_print
-            print('HOLA');
+          CustomButton(
+            icon: Icons.login_outlined, 
+            text: 'Entrar', 
+            onPressed: authService.waiting ? null : () async {
+              FocusScope.of(context).unfocus(); // quita el teclado
+              final loginOk = await authService.login(emailController.text.trim(), passwordController.text.trim());
+              if(loginOk){
+                // Navegar al chat 
+                // pushReplacement porque no quiero que vuelvan al 'login' entonces voy a reemplazarlo
+                Navigator.pushReplacementNamed(context, 'usuarios');
+              } else {
+                mostrarAlerta(context, 'Error en el login', 'error');
+              }
           })
         ]
       )

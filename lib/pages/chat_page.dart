@@ -112,7 +112,6 @@ class _ChatPageState extends State<ChatPage> with TickerProviderStateMixin {
     _messages.insert(0, newMessage);
     // luego de insertar el mensaje activo la animación 
     newMessage.animationController.forward().then((_) => {
-      print('DESTRUIR'),
       newMessage.animationController.dispose()
     });
     setState((){  
