@@ -1,5 +1,6 @@
 import 'package:chat/helpers/mostrar_alerta.dart';
 import 'package:chat/services/auth_service.dart';
+import 'package:chat/services/socket_service.dart';
 import 'package:chat/widgets/custom_button.dart';
 import 'package:chat/widgets/custom_input.dart';
 import 'package:chat/widgets/login_labels.dart';
@@ -55,6 +56,7 @@ class __FormState extends State<_Form> {
   Widget build(BuildContext context) {
 
     final authService = Provider.of<AuthService>(context);
+    final socketService = Provider.of<SocketService>(context);
 
 
     return Container(
@@ -96,6 +98,7 @@ class __FormState extends State<_Form> {
               if(registerOk){
                 // Navegar al chat 
                 // pushReplacement porque no quiero que vuelvan al 'login' entonces voy a reemplazarlo
+                socketService.connect();
                 Navigator.pushReplacementNamed(context, 'usuarios');
               } else {
                 mostrarAlerta(context, 'Error en el registro', 'error');

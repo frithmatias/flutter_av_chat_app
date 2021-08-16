@@ -1,6 +1,8 @@
+import 'package:chat/services/auth_service.dart';
 import 'package:flutter/material.dart';
+import 'package:provider/provider.dart';
 
-class ChatMessage extends StatelessWidget {
+class BubbleMessage extends StatelessWidget {
 
   final String text;
   final String uid;
@@ -9,7 +11,7 @@ class ChatMessage extends StatelessWidget {
 
   // En mi Widget burbuja le adjunto un animationController que voy a recibir como argumento al momento 
   // de crear o instanciar el Widget
-  const ChatMessage({ 
+  const BubbleMessage({ 
     Key? key, 
     required this.text, 
     required this.uid,
@@ -19,6 +21,8 @@ class ChatMessage extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+
+    final authService = Provider.of<AuthService>(context, listen: false);
     return FadeTransition(
       opacity: animationController,
       child: SizeTransition(
@@ -26,7 +30,7 @@ class ChatMessage extends StatelessWidget {
           parent: animationController, curve: Curves.easeOut
         ),
         child: Container(
-          child: uid == '123' 
+          child: uid == authService.usuario.txUid 
           ? _myMessage()
           : _othersMessage()
         ),

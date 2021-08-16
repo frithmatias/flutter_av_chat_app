@@ -1,7 +1,4 @@
-// ignore_for_file: avoid_print
-
 import 'dart:convert';
-
 import 'package:chat/global/environment.dart';
 import 'package:chat/models/login.dart';
 import 'package:chat/models/usuario.dart';
@@ -61,16 +58,13 @@ class AuthService with ChangeNotifier {
   }
 
   Future<bool> register(String name, String email, String password) async {
-
     waiting = true;
 
     final data = {'name': name, 'email': email, 'password': password};
     final url = Uri.parse(Environments.apiUrl + '/auth/register');
-    final resp = await http.post(
-      url, 
-      body: jsonEncode(data), // import 'dart:convert';
-      headers: {'Content-Type': 'application/json'}
-    );
+    final resp =
+        await http.post(url, body: jsonEncode(data), // import 'dart:convert';
+            headers: {'Content-Type': 'application/json'});
 
     waiting = false;
 
@@ -85,23 +79,21 @@ class AuthService with ChangeNotifier {
   }
 
   Future<bool> isLogged() async {
+    // Con un token VIEJO consulto si es válido, si es válido solicito un NUEVO token que voy a
+    // reemplazar en la storage.
+
     // waiting = true;
 
     final token = await _storage.read(key: 'token');
-    print('TOKEN: $token');
     // verifico el token contra el API localhost:3000/api/auth/newtoken
-    if(token == null) return false;
+    if (token == null) return false;
 
     final url = Uri.parse(Environments.apiUrl + '/auth/newtoken');
-    final resp =
-        await http.get(url, // import 'dart:convert';
-            headers: {
-              'Content-Type': 'application/json',
-              'x-token': token
-            });
+    final resp = await http.get(url, // import 'dart:convert';
+        headers: {'Content-Type': 'application/json', 'x-token': token});
 
     // waiting = false;
-    // la petición va a pasar por el middleware verificaToken, si pasa el middleware va a ejecutar 
+    // la petición va a pasar por el middleware verificaToken, si pasa el middleware va a ejecutar
     // newToken que me va a devolver un nuevo token.
     if (resp.statusCode == 200) {
       final loginResponse = loginFromJson(resp.body);
@@ -112,7 +104,6 @@ class AuthService with ChangeNotifier {
       logout();
       return false;
     }
-
   }
 
   Future _guardarToken(String token) async {

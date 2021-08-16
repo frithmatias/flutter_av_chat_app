@@ -1,10 +1,8 @@
-// ignore_for_file: avoid_print
-
 import 'package:chat/pages/usuarios_page.dart';
 import 'package:chat/services/auth_service.dart';
+import 'package:chat/services/socket_service.dart';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
-
 
 class LoadingPage extends StatelessWidget {
   const LoadingPage({Key? key}) : super(key: key);
@@ -28,11 +26,11 @@ class LoadingPage extends StatelessWidget {
   Future checkLogged(context) async {
 
     final authService = Provider.of<AuthService>(context);
+    final socketService = Provider.of<SocketService>(context);
     final logged = await authService.isLogged();
 
-    print('LOGGED: $logged');
-
     if(logged){
+      socketService.connect();
       // Navigator.pushReplacementNamed(context, 'usuarios');
       // Navigator podría hacer un efecto de swipe que yo no quiero, y para evitarlo puedo usar PageRouteBuilder
       Navigator.pushReplacement(context, PageRouteBuilder(
